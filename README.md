@@ -103,6 +103,20 @@ or type `/gpt` inside Claude Code (after `--install-commands`). Claude Code keep
 
 > **Caveat:** agent-loop quality (tool calling, file edits, long autonomous runs) varies by model. Models that speak the Anthropic format natively (Claude, DeepSeek's Anthropic endpoint) tend to behave best; GPT/Gemini go through LiteLLM's format translation, which can occasionally change tool-call behavior.
 
+### Model mapping matrix
+
+What actually runs when you pick a model in Claude Code (`/model`), per active preset. The proxy matches the **tier keyword** in the model name — `opus` → opus tier, `haiku` → haiku tier, anything else (Sonnet, Fable, unknown) → sonnet tier:
+
+| Your pick in Claude Code | Tier | preset `deepseek` | preset `claude` | preset `gpt` | preset `gemini` |
+|---|---|---|---|---|---|
+| Default / Opus (`claude-opus-4-8`) | opus | deepseek-v4-pro | claude-opus-4-8 | gpt-5.5 | gemini-3.5-flash |
+| Fable (`claude-fable-5`) | sonnet | deepseek-v4-pro | claude-sonnet-4-6 | gpt-5.5 | gemini-3.5-flash |
+| Sonnet (`claude-sonnet-4-6`) | sonnet | deepseek-v4-pro | claude-sonnet-4-6 | gpt-5.5 | gemini-3.5-flash |
+| Haiku (`claude-haiku-4-5`) | haiku | deepseek-v4-pro | claude-haiku-4-5 | gpt-5-mini | gemini-2.5-flash |
+| Subagents (usually haiku tier) | haiku | deepseek-v4-pro | claude-haiku-4-5 | gpt-5-mini | gemini-2.5-flash |
+
+So on the `gpt` preset, picking Opus, Fable, or Sonnet in Claude Code all run `gpt-5.5`; only Haiku differs (`gpt-5-mini`). On single-model presets like `deepseek`, the picker choice makes no difference at all — control the model with presets (`/gpt`, `--switch`) instead. The picker only truly matters on presets whose three tiers point at different models (like `claude`).
+
 ### Model comparison matrix
 
 Reference for the presets above (context/output limits as reported by a LiteLLM gateway's `/v1/models`; pricing is indicative list price — your gateway's billing may differ):
