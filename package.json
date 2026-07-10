@@ -1,0 +1,19 @@
+{
+  "name": "liteclaude",
+  "version": "0.1.0",
+  "description": "Claude Code's autonomous agent loop on any LiteLLM backend — deepclaude for LiteLLM",
+  "bin": {
+    "liteclaude": "bin/liteclaude.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arraisi/liteclaude.git"
+  },
+  "license": "MIT"
+}
