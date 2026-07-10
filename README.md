@@ -22,12 +22,15 @@ Everything works: file reading/editing, bash execution, multi-step autonomous lo
 ```bash
 git clone git@github.com:arraisi/liteclaude.git
 cd liteclaude
-npm link          # or: sudo ln -s "$(pwd)/bin/liteclaude.js" /usr/local/bin/liteclaude
+./install.sh
 ```
 
-## Setup (2 minutes)
+The installer prompts for your LiteLLM base URL and API key (input hidden), validates them against `/v1/models`, **scans the available models to auto-generate presets** in `~/.liteclaude.json`, optionally saves the key to your shell rc, and links the `liteclaude` CLI. Non-interactive: set `LITELLM_BASE_URL` and `LITELLM_API_KEY` first.
+
+### Manual setup (alternative)
 
 ```bash
+npm link                                # or: sudo ln -s "$(pwd)/bin/liteclaude.js" /usr/local/bin/liteclaude
 liteclaude --init                       # writes starter ~/.liteclaude.json
 $EDITOR ~/.liteclaude.json              # set litellm.baseUrl + preset model aliases
 export LITELLM_API_KEY="sk-..."         # your LiteLLM key (put in ~/.zshrc)
