@@ -55,6 +55,16 @@ Example `~/.liteclaude.json`:
       "opus": "claude-opus-4-8",
       "sonnet": "claude-sonnet-4-6",
       "haiku": "claude-haiku-4-5-20251001"
+    },
+    "gpt": {
+      "opus": "gpt-5.5-2026-04-23",
+      "sonnet": "gpt-5.5-2026-04-23",
+      "haiku": "gpt-5-mini"
+    },
+    "gemini": {
+      "opus": "gemini/gemini-3.5-flash",
+      "sonnet": "gemini/gemini-3.5-flash",
+      "haiku": "gemini/gemini-2.5-flash"
     }
   }
 }
@@ -80,6 +90,34 @@ liteclaude --install-commands
 ```
 
 Generates `~/.claude/commands/<preset>.md` for each preset — then type `/deepseek`, `/claude`, etc. inside any Claude Code session to switch instantly.
+
+### Switching models
+
+Any model on your LiteLLM gateway works — GPT, Gemini, DeepSeek, Claude, Llama. Switch the active preset mid-session:
+
+```bash
+liteclaude --switch gpt        # from another terminal
+```
+
+or type `/gpt` inside Claude Code (after `--install-commands`). Claude Code keeps sending `claude-*` model names; the proxy rewrites them to the active preset's aliases, and LiteLLM translates the Anthropic Messages format for non-Anthropic backends.
+
+> **Caveat:** agent-loop quality (tool calling, file edits, long autonomous runs) varies by model. Models that speak the Anthropic format natively (Claude, DeepSeek's Anthropic endpoint) tend to behave best; GPT/Gemini go through LiteLLM's format translation, which can occasionally change tool-call behavior.
+
+### Model comparison matrix
+
+Reference for the presets above (context/output limits as reported by a LiteLLM gateway's `/v1/models`; pricing is indicative list price — your gateway's billing may differ):
+
+| Preset | Model (opus/sonnet tier) | Context | Max output | $/M in | $/M out | Agent loop | Notes |
+|---|---|---|---|---|---|---|---|
+| `deepseek` | deepseek/deepseek-v4-pro | 1M | 8k | ~$0.44 | ~$0.87 | ★★★★ | Cheapest; native Anthropic endpoint; small output cap |
+| `claude` | claude-opus-4-8 | 1M | 128k | $5 | $25 | ★★★★★ | Strongest reasoning + tool use; most expensive |
+| `claude` (sonnet tier) | claude-sonnet-4-6 | 1M | 64k | $3 | $15 | ★★★★★ | Best balance for routine agent work |
+| `claude` (haiku tier) | claude-haiku-4-5 | 200k | 64k | $1 | $5 | ★★★★ | Fast subagent tier |
+| `gpt` | gpt-5.5 | 1.05M | 128k | varies | varies | ★★★★ | Strong coding; via format translation |
+| `gpt` (haiku tier) | gpt-5-mini | 272k | 128k | varies | varies | ★★★ | Cheap subagent tier |
+| `gemini` | gemini/gemini-3.5-flash | 1.05M | 64k | varies | varies | ★★★ | Fast + cheap; tool-call quirks via translation |
+
+Rules of thumb: `deepseek` for cheap everyday loops, `claude` when a task is hard or tool-heavy, `gpt`/`gemini` when those models fit your gateway's pricing better. Compare real latency on *your* gateway with `liteclaude --benchmark`, and real spend with `liteclaude --cost`.
 
 ## How it works
 
